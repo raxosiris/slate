@@ -28,6 +28,7 @@ chargeInstruction | map of type `paymentDetails` | A map containing information 
 
 ### orderStatus
 `orderStatus : map`
+
 | Name | Type | Description | Notes
 --- |---|------|--
 startedAt| timeStamp | Timestamp of when the stage of the orderStaus started | [required]
@@ -36,6 +37,7 @@ finishedAt | timeStamp | Timestamp of when the stage of the orderStatus was fini
 ### orderError
 `orderError : map`
 This key only exists when the order fails due to one of many reasons
+
 | Name | Type | Description | Notes
 --- |---|------|--
 errorStatus| string | One of the following: `paymentRejected`, `restaurantCancelled`, `userCancelled`, `otterlyCancelled` | [required]
@@ -71,6 +73,7 @@ selectedOptions | map of type `selectedOptions` |Defines the selected options| [
 
 #### selectedOptions
 `selectedOptions: map with key {optionsGroupSlug}`
+
 | Values | Type | Description | Notes
 --- |---|------|--
 `{optionSlug}`| map of type `selectedOption`| Map containing information about specific option(s) selected from an options group and their price | [required]

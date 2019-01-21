@@ -41,6 +41,7 @@ selectedOptions | map of type `selectedOptions` |Defines the selected options| [
 
 #### selectedOptions
 `selectedOptions: map with key {optionsGroupSlug}`
+
 | Values | Type | Description | Notes
 --- |---|------|--
 `{optionSlug}`| map of type `selectedOption`| Map containing information about specific option(s) selected from an options group and their price | [required]
