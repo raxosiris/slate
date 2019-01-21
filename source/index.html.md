@@ -12,7 +12,8 @@ includes:
   - users
   - dishes
   - restaurants
-  - errors
+  - carts
+  - orders
 
 search: true
 ---
