@@ -290,7 +290,45 @@
               </ul>
           </li>
           <li>
-            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+            <a href="#carts" class="toc-h1 toc-link" data-title="Carts">Carts</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#carts-path" class="toc-h2 toc-link" data-title="Path">Path</a>
+                  </li>
+                  <li>
+                    <a href="#carts-structure" class="toc-h2 toc-link" data-title="Structure">Structure</a>
+                        <ul class="toc-list-h3">
+                            <li>
+                              <a href="#carts-structure-orderdishes" class="toc-h3 toc-link" data-title="orderDishes">orderDishes</a>
+                            </li>
+                        </ul>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#orders" class="toc-h1 toc-link" data-title="Orders">Orders</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#orders-path" class="toc-h2 toc-link" data-title="Path">Path</a>
+                  </li>
+                  <li>
+                    <a href="#orders-structure" class="toc-h2 toc-link" data-title="Structure">Structure</a>
+                        <ul class="toc-list-h3">
+                            <li>
+                              <a href="#orders-structure-orderstatus" class="toc-h3 toc-link" data-title="orderStatus">orderStatus</a>
+                            </li>
+                            <li>
+                              <a href="#orders-structure-ordererror" class="toc-h3 toc-link" data-title="orderError">orderError</a>
+                            </li>
+                            <li>
+                              <a href="#orders-structure-paymentdetails" class="toc-h3 toc-link" data-title="paymentDetails">paymentDetails</a>
+                            </li>
+                            <li>
+                              <a href="#orders-structure-orderdishes" class="toc-h3 toc-link" data-title="orderDishes">orderDishes</a>
+                            </li>
+                        </ul>
+                  </li>
+              </ul>
           </li>
       </ul>
         <ul class="toc-footer">
@@ -833,62 +871,432 @@ One of either <code>phone</code> or <code>email</code> is required for each user
 <td>[required]</td>
 </tr>
 </tbody></table>
-<h1 id='errors'>Errors</h1>
-<aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
+<h1 id='carts'>Carts</h1>
+<p>Contains carts for users.</p>
+<h2 id='carts-path'>Path</h2>
+<p><code>/carts/{cart}</code></p>
 
-<p>The Kittn API uses the following error codes:</p>
-
+<p>where <code>{cart}</code> is the uid of a user who is adding items to the cart.</p>
+<h2 id='carts-structure'>Structure</h2>
 <table><thead>
 <tr>
-<th>Error Code</th>
-<th>Meaning</th>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request -- Your request is invalid.</td>
+<td>uid</td>
+<td>string</td>
+<td>Unique ID for the user obtained from firebase auth</td>
+<td>[required]</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
+<td>totalDishes</td>
+<td>number</td>
+<td>Total number of dishes (items) in the cart</td>
+<td>[required]</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+<td>totalPriceBeforeDiscount</td>
+<td>Total price of the dishes before discount</td>
+<td>[required]</td>
+<td></td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
+<td>totalPriceAfterDiscount</td>
+<td>Total price of the dishes after discount</td>
+<td>[required]</td>
+<td></td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
+<td>expectBy</td>
+<td>timestamp</td>
+<td>Timestamp of when the user can expect this order</td>
+<td>[optional]</td>
 </tr>
 <tr>
-<td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
+<td>totalPreparationTime</td>
+<td>number</td>
+<td>Total estimated preparation time. In case of one dish, it will be simply the current preparation time. In case of multiple dishes / quantities, this has to be calculated on the server side</td>
+<td>[optional]</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
+<td>createdAt</td>
+<td>timestamp</td>
+<td>Timestamp of when the cart was created</td>
+<td>[required] generated automatically by a cloud function</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
+<td>specialRequests</td>
+<td>string</td>
+<td>Any special requests that the user wants conveyed to the restaurant</td>
+<td>[optional]</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+<td>restaurantDetails</td>
+<td>map of type <a href="#dishes-structure-restaurantdetails"><code>restaurantDetails</code></a></td>
+<td>A map containing brief information about the restaurant</td>
+<td>[required]</td>
 </tr>
 <tr>
-<td>500</td>
-<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+<td>dishes</td>
+<td>map of type <a href="#orderdishes"><code>orderDishes</code></a></td>
+<td>A map containing all the dishes that are added</td>
+<td>[required]</td>
+</tr>
+</tbody></table>
+<h3 id='carts-structure-orderdishes'>orderDishes</h3>
+<p><code>orderDishes: map with key {dishId}</code>
+<aside class="notice">
+This map is slightly different than others. It uses <code>dishId</code> as key. 
+</aside></p>
+
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Display name of the dish</td>
+<td>[required]</td>
 </tr>
 <tr>
-<td>503</td>
-<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+<td>originalPrice</td>
+<td>number</td>
+<td>The original price of the dish (includes VAT in the UK)</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>currentPreparationTime</td>
+<td>number</td>
+<td>The current preparation time estimate</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>lockedPrice</td>
+<td>number</td>
+<td>The price at the time when the item was added to the cart. In case of an item not being dynamic, this is equal to the original price</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>addedAt</td>
+<td>timestamp</td>
+<td>The timestamp of when the product was added to the cart</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>lockedUntil</td>
+<td>timestamp</td>
+<td>The timestamp until the price is locked</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>imageUrl</td>
+<td>string</td>
+<td>Image associated with the dish</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>totalOptionsPrice</td>
+<td>number</td>
+<td>Total price of the options if any options were selected</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>selectedOptions</td>
+<td>map of type <code>selectedOptions</code></td>
+<td>Defines the selected options</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
+<h4 id='carts-structure-orderdishes-selectedoptions'>selectedOptions</h4>
+<p><code>selectedOptions: map with key {optionsGroupSlug}</code>
+| Values | Type | Description | Notes
+--- |---|------|--
+<code>{optionSlug}</code>| map of type <code>selectedOption</code>| Map containing information about specific option(s) selected from an options group and their price | [required]</p>
+<h4 id='carts-structure-orderdishes-selectedoption'>selectedOption</h4>
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>optionText</td>
+<td>string</td>
+<td>The text of the option to be displayed in the UI</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>price</td>
+<td>number</td>
+<td>If the option carries a price, it is carried here</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
+<h1 id='orders'>Orders</h1>
+<p>Contains carts for users.</p>
+<h2 id='orders-path'>Path</h2>
+<p><code>/orders/{order}</code></p>
+
+<p>where <code>{order}</code> is an automatically generated unique id of the order</p>
+<h2 id='orders-structure'>Structure</h2>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderNumber</td>
+<td>number</td>
+<td>Order number. To be used for the purpose of collection and reference</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>orderStatus</td>
+<td>special map of type <code>orderStatus</code></td>
+<td>Constructs five keys: <code>processing</code> - <code>placed</code> - <code>confirmed</code> - <code>prepared</code>  - <code>completed</code> as the order progress changes</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>orderError</td>
+<td>map of type <code>orderError</code></td>
+<td>The error object in case the order fails</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>timestamp</td>
+<td>Timestamp of when the order was created</td>
+<td>[required] generated automatically by a cloud function</td>
+</tr>
+<tr>
+<td>uid</td>
+<td>string</td>
+<td>Unique ID for the user obtained from firebase auth</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>string</td>
+<td>Name of the user. For the purpose of order collection</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>totalDishes</td>
+<td>number</td>
+<td>Total number of dishes (items) in the cart</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>totalPriceBeforeDiscount</td>
+<td>Total price of the dishes before discount</td>
+<td>[required]</td>
+<td></td>
+</tr>
+<tr>
+<td>totalPriceAfterDiscount</td>
+<td>Total price of the dishes after discount</td>
+<td>[required]</td>
+<td></td>
+</tr>
+<tr>
+<td>expectBy</td>
+<td>timestamp</td>
+<td>Timestamp of when the user can expect this order</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>totalPreparationTime</td>
+<td>number</td>
+<td>Total estimated preparation time. In case of one dish, it will simply be the current preparation time. In case of multiple dishes / quantities, this has to be calculated on the server side</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>specialRequests</td>
+<td>string</td>
+<td>Any special requests that the user wants conveyed to the restaurant</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>restaurantDetails</td>
+<td>map of type <a href="#dishes-structure-restaurantdetails"><code>restaurantDetails</code></a></td>
+<td>A map containing brief information about the restaurant</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>dishes</td>
+<td>map of type <a href="#orderdishes"><code>orderDishes</code></a></td>
+<td>A map containing all the dishes that are ordered</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>chargeInstruction</td>
+<td>map of type <code>paymentDetails</code></td>
+<td>A map containing information regarding payments</td>
+<td>[required]</td>
+</tr>
+</tbody></table>
+<h3 id='orders-structure-orderstatus'>orderStatus</h3>
+<p><code>orderStatus : map</code>
+| Name | Type | Description | Notes
+--- |---|------|--
+startedAt| timeStamp | Timestamp of when the stage of the orderStaus started | [required]
+finishedAt | timeStamp | Timestamp of when the stage of the orderStatus was finished | [required]</p>
+<h3 id='orders-structure-ordererror'>orderError</h3>
+<p><code>orderError : map</code>
+This key only exists when the order fails due to one of many reasons
+| Name | Type | Description | Notes
+--- |---|------|--
+errorStatus| string | One of the following: <code>paymentRejected</code>, <code>restaurantCancelled</code>, <code>userCancelled</code>, <code>otterlyCancelled</code> | [required]
+errorMessageAdmin | string | Error message for the records of adminn | [optional]
+errorMessageUser | string | Error message to show to the user | [optional]</p>
+<h3 id='orders-structure-paymentdetails'>paymentDetails</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>cardId</td>
+<td>string</td>
+<td>ID of the card to charge</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>applePayNonce</td>
+<td>string</td>
+<td>In case apple pay is used, the payments SDK will generate a nonce</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>googlePayNonce</td>
+<td>string</td>
+<td>In case google pay is used, the payments SDK will generate a nonce</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>one of the following <code>processing</code>,<code>accepted</code>, <code>rejected</code></td>
+<td></td>
+</tr>
+<tr>
+<td>retryCount</td>
+<td>number</td>
+<td>keeps a track of retries and confirms that a retry is requested. Initialises at 1 on first retry</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
+<h3 id='orders-structure-orderdishes'>orderDishes</h3>
+<p><code>orderDishes: map with key {dishId}</code>
+<aside class="notice">
+This map is slightly different than others. It uses <code>dishId</code> as key. 
+</aside></p>
+
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Display name of the dish</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>originalPrice</td>
+<td>number</td>
+<td>The original price of the dish (includes VAT in the UK)</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>currentPreparationTime</td>
+<td>number</td>
+<td>The current preparation time estimate</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>lockedPrice</td>
+<td>number</td>
+<td>The price at the time when the item was added to the cart. In case of an item not being dynamic, this is equal to the original price</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>addedAt</td>
+<td>timestamp</td>
+<td>The timestamp of when the product was added to the cart</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>lockedUntil</td>
+<td>timestamp</td>
+<td>The timestamp until the price is locked</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>imageUrl</td>
+<td>string</td>
+<td>Image associated with the dish</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>totalOptionsPrice</td>
+<td>number</td>
+<td>Total price of the options if any options were selected</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>selectedOptions</td>
+<td>map of type <code>selectedOptions</code></td>
+<td>Defines the selected options</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
+<h4 id='orders-structure-orderdishes-selectedoptions'>selectedOptions</h4>
+<p><code>selectedOptions: map with key {optionsGroupSlug}</code>
+| Values | Type | Description | Notes
+--- |---|------|--
+<code>{optionSlug}</code>| map of type <code>selectedOption</code>| Map containing information about specific option(s) selected from an options group and their price | [required]</p>
+<h4 id='orders-structure-orderdishes-selectedoption'>selectedOption</h4>
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>optionText</td>
+<td>string</td>
+<td>The text of the option to be displayed in the UI</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>price</td>
+<td>number</td>
+<td>If the option carries a price, it is carried here</td>
+<td>[optional]</td>
 </tr>
 </tbody></table>
 
