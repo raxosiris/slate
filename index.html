@@ -1017,10 +1017,23 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 </tr>
 </tbody></table>
 <h4 id='carts-structure-orderdishes-selectedoptions'>selectedOptions</h4>
-<p><code>selectedOptions: map with key {optionsGroupSlug}</code>
-| Values | Type | Description | Notes
---- |---|------|--
-<code>{optionSlug}</code>| map of type <code>selectedOption</code>| Map containing information about specific option(s) selected from an options group and their price | [required]</p>
+<p><code>selectedOptions: map with key {optionsGroupSlug}</code></p>
+
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>{optionSlug}</code></td>
+<td>map of type <code>selectedOption</code></td>
+<td>Map containing information about specific option(s) selected from an options group and their price</td>
+<td>[required]</td>
+</tr>
+</tbody></table>
 <h4 id='carts-structure-orderdishes-selectedoption'>selectedOption</h4>
 <table><thead>
 <tr>
@@ -1150,19 +1163,60 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 </tr>
 </tbody></table>
 <h3 id='orders-structure-orderstatus'>orderStatus</h3>
-<p><code>orderStatus : map</code>
-| Name | Type | Description | Notes
---- |---|------|--
-startedAt| timeStamp | Timestamp of when the stage of the orderStaus started | [required]
-finishedAt | timeStamp | Timestamp of when the stage of the orderStatus was finished | [required]</p>
+<p><code>orderStatus : map</code></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>startedAt</td>
+<td>timeStamp</td>
+<td>Timestamp of when the stage of the orderStaus started</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>finishedAt</td>
+<td>timeStamp</td>
+<td>Timestamp of when the stage of the orderStatus was finished</td>
+<td>[required]</td>
+</tr>
+</tbody></table>
 <h3 id='orders-structure-ordererror'>orderError</h3>
 <p><code>orderError : map</code>
-This key only exists when the order fails due to one of many reasons
-| Name | Type | Description | Notes
---- |---|------|--
-errorStatus| string | One of the following: <code>paymentRejected</code>, <code>restaurantCancelled</code>, <code>userCancelled</code>, <code>otterlyCancelled</code> | [required]
-errorMessageAdmin | string | Error message for the records of adminn | [optional]
-errorMessageUser | string | Error message to show to the user | [optional]</p>
+This key only exists when the order fails due to one of many reasons</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>errorStatus</td>
+<td>string</td>
+<td>One of the following: <code>paymentRejected</code>, <code>restaurantCancelled</code>, <code>userCancelled</code>, <code>otterlyCancelled</code></td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>errorMessageAdmin</td>
+<td>string</td>
+<td>Error message for the records of adminn</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>errorMessageUser</td>
+<td>string</td>
+<td>Error message to show to the user</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
 <h3 id='orders-structure-paymentdetails'>paymentDetails</h3>
 <table><thead>
 <tr>
@@ -1273,10 +1327,23 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 </tr>
 </tbody></table>
 <h4 id='orders-structure-orderdishes-selectedoptions'>selectedOptions</h4>
-<p><code>selectedOptions: map with key {optionsGroupSlug}</code>
-| Values | Type | Description | Notes
---- |---|------|--
-<code>{optionSlug}</code>| map of type <code>selectedOption</code>| Map containing information about specific option(s) selected from an options group and their price | [required]</p>
+<p><code>selectedOptions: map with key {optionsGroupSlug}</code></p>
+
+<table><thead>
+<tr>
+<th>Values</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>{optionSlug}</code></td>
+<td>map of type <code>selectedOption</code></td>
+<td>Map containing information about specific option(s) selected from an options group and their price</td>
+<td>[required]</td>
+</tr>
+</tbody></table>
 <h4 id='orders-structure-orderdishes-selectedoption'>selectedOption</h4>
 <table><thead>
 <tr>
