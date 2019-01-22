@@ -15,8 +15,7 @@ name| string | The display name of the dish | [required]
 originalPrice | number | The original price of the dish (includes VAT in the UK) | [required]
 maxQuantity | number | Restricts the number of the same item that can be bought at the same time | [optional]
 featured | boolean | Whether this item is featured in the restaurant's menu | [optional]
-categorySlug | string | A slug of the category to be used in sorting and displaying in the UI | [optional] 
-categoryText | string | Name of the category to be shown in UI  | [optional]
+categoryInfo | map of type `categoryInfo` | A map containing information about the category(s) this dish belongs to, and the display order | [optional]
 averagePreparationTime | number | Time it takes for the dish to be prepared, on average (in seconds) | [optional]
 currentPreparationTime | number | The current preparation time estimate | [optional]
 description | string | A description of the dish | [optional]
@@ -27,6 +26,15 @@ goesWellWith | arrary[`{dish}`] | An array that contains dish ids of the dishes 
 ingredients | array[`string` ]| An array containing ingredients of this dish in lowercase formatted strings | [optional]
 tags | array[`string`] | Any tags associated with the dish - e.g. vegan, vegetarian, halal | [optional]
 restaurantDetails | map of type [`restaurantDetails`](#dishes-structure-restaurantdetails) | A map containing brief information about the restaurant | [required]
+
+### categoryInfo
+`categoryInfo: map of map with keys as categorySlug`
+below is the information on what each key `categorySlug` has as ivalues.
+
+| Name | Type | Description | Notes
+--- |---|------|--
+categoryText | string | Category text to show in the UI | [required]
+displayOrder | number | Dispplay order of this dish in the specific category. A simple index value. In case not present, the dish is inserted at the bottom of the list | [optional]
 
 ### restaurantDetails
 `restaurantDetails : map`
