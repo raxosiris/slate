@@ -18,7 +18,6 @@ maxQuantity | number | Restricts the number of the same item that can be bought 
 featured | boolean | Whether this item is featured in the restaurant's menu | [optional]
 categoryInfo | map of type `categoryInfo` | A map containing information about the category(s) this dish belongs to, and the display order | [optional]
 averagePreparationTime | number | Time it takes for the dish to be prepared, on average (in seconds) | [optional]
-currentPreparationTime | number | The current preparation time estimate | [optional]
 description | string | A description of the dish | [optional]
 imageUrl | string | Image associated with the dish | [optional]
 rating | number | The average rating gathered from the reviews posted about this dish | [optional]
