@@ -12,6 +12,7 @@ where `{dish}` is an automatically generated uid for a dish
 --- |---|------|--
 id|string|Unique ID for the dish. Same as the document name | [required]
 name| string | The display name of the dish | [required]
+isDynamic | boolean | If a dish has dynamic pricing, this parameter is true, otherwise not present. If present, the currentPrice needs to be fetched from RTDB | [optional]
 originalPrice | number | The original price of the dish (includes VAT in the UK) | [required]
 maxQuantity | number | Restricts the number of the same item that can be bought at the same time | [optional]
 featured | boolean | Whether this item is featured in the restaurant's menu | [optional]
