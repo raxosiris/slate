@@ -14,7 +14,9 @@ id|string|Unique ID for the restaurant. Same as the document name | [required]
 name| string | The display name of the restaurant | [required]
 imageUrl | string | The image associated with the restaurant | [optional]
 description | string | A description of the restaurant | [optional]
+phone | string | Phone number of the restaurant | [optional]
 address | map of type [`address`](#restaurants-structure--address) | Details about location of the restaurant | [required]
+categoriesDisplayOrder | arrary of `categorySlug` | Contains information about the displayOrder of the categories. When updating, a new instance has to be created since firestore does not allow order operations | [optional]
 
 
 
