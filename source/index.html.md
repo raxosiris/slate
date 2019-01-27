@@ -13,6 +13,7 @@ includes:
   - dishes
   - restaurants
   - carts
+  - paymentRequests
   - orders
 
 search: true
