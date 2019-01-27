@@ -535,6 +535,12 @@ One of either <code>phone</code> or <code>email</code> is required for each user
 <td>[required]</td>
 </tr>
 <tr>
+<td>isDynamic</td>
+<td>boolean</td>
+<td>If a dish has dynamic pricing, this parameter is true, otherwise not present. If present, the currentPrice needs to be fetched from RTDB</td>
+<td>[optional]</td>
+</tr>
+<tr>
 <td>originalPrice</td>
 <td>number</td>
 <td>The original price of the dish (includes VAT in the UK)</td>
