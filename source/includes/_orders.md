@@ -1,9 +1,9 @@
 # Orders
-Contains carts for users.
+A cart is converted to an order after a successful payment.
 ## Path
 `/orders/{order}`
 
-where `{order}` is an automatically generated unique id of the order
+where `{order}` is an a unique order id. This id corresponds to a successful paymentRequest id
 
 
 ## Structure
@@ -11,9 +11,8 @@ where `{order}` is an automatically generated unique id of the order
 | Name | Type | Description | Notes
 --- |---|------|--
 orderNumber | number | Order number. To be used for the purpose of collection and reference | [optional]
-orderStatus | special map of type `orderStatus` | Constructs five keys: `processing` - `placed` - `confirmed` - `prepared`  - `completed` as the order progress changes | [required] 
+orderStatus | special map of type `orderStatus` | Constructs five keys: `placed` - `confirmed` - `preparing` - `prepared`  - `completed` as the order progress changes | [required] 
 orderError | map of type `orderError`| The error object in case the order fails | [optional]
-createdAt | timestamp | Timestamp of when the order was created | [required] generated automatically by a cloud function
 uid|string|Unique ID for the user obtained from firebase auth | [required]
 userName | string | Name of the user. For the purpose of order collection | [required]
 totalDishes | number | Total number of dishes (items) in the cart | [required]
@@ -24,7 +23,7 @@ totalPreparationTime | number | Total estimated preparation time. In case of one
 specialRequests | string | Any special requests that the user wants conveyed to the restaurant | [optional]
 restaurantDetails | map of type [`restaurantDetails`](#dishes-structure-restaurantdetails) | A map containing brief information about the restaurant | [required]
 dishes | map of type [`orderDishes`](#orderdishes) | A map containing all the dishes that are ordered | [required]
-chargeInstruction | map of type `paymentDetails` | A map containing information regarding payments | [required]
+paymentDetails | map of type `paymentDetails` | A map containing information regarding payments | [required]
 
 ### orderStatus
 `orderStatus : map`
@@ -40,18 +39,17 @@ This key only exists when the order fails due to one of many reasons
 
 | Name | Type | Description | Notes
 --- |---|------|--
-errorStatus| string | One of the following: `paymentRejected`, `restaurantCancelled`, `userCancelled`, `otterlyCancelled` | [required]
-errorMessageAdmin | string | Error message for the records of adminn | [optional]
-errorMessageUser | string | Error message to show to the user | [optional]
+errorStatus| string | One of the following: `restaurantCancelled`, `userCancelled`, `otterlyCancelled` | [required]
+mssageAdmin | string | Error message for the records of adminn | [optional]
+messageUser | string | Error message to show to the user | [optional]
 
 ### paymentDetails
 | Name | Type | Description | Notes
 --- |---|------|--
-cardId| string | ID of the card to charge | [required]
-applePayNonce | string | In case apple pay is used, the payments SDK will generate a nonce | [optional]
-googlePayNonce | string | In case google pay is used, the payments SDK will generate a nonce | [optional]
-status | string |  one of the following `processing`,`accepted`, `rejected`
-retryCount | number | keeps a track of retries and confirms that a retry is requested. Initialises at 1 on first retry | [optional]
+squarePaymentId| string | ID of the payment | [required]
+lastFourDigits | string | Last four digits of the payment card | [optional]
+cardBrand | string | The brand of the card | [optional]
+completedAt | timestamp | Timestamp of payment completion | [required]
 
 ### orderDishes
 `orderDishes: map with key {dishId}`
