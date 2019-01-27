@@ -256,6 +256,9 @@
                     <a href="#dishes-structure" class="toc-h2 toc-link" data-title="Structure">Structure</a>
                         <ul class="toc-list-h3">
                             <li>
+                              <a href="#dishes-structure-categoryinfo" class="toc-h3 toc-link" data-title="categoryInfo">categoryInfo</a>
+                            </li>
+                            <li>
                               <a href="#dishes-structure-restaurantdetails" class="toc-h3 toc-link" data-title="restaurantDetails">restaurantDetails</a>
                             </li>
                         </ul>
@@ -300,6 +303,25 @@
                         <ul class="toc-list-h3">
                             <li>
                               <a href="#carts-structure-orderdishes" class="toc-h3 toc-link" data-title="orderDishes">orderDishes</a>
+                            </li>
+                        </ul>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#paymentrequests" class="toc-h1 toc-link" data-title="PaymentRequests">PaymentRequests</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#paymentrequests-path" class="toc-h2 toc-link" data-title="Path">Path</a>
+                  </li>
+                  <li>
+                    <a href="#paymentrequests-structure" class="toc-h2 toc-link" data-title="Structure">Structure</a>
+                        <ul class="toc-list-h3">
+                            <li>
+                              <a href="#paymentrequests-structure-paymentinstruction" class="toc-h3 toc-link" data-title="paymentInstruction">paymentInstruction</a>
+                            </li>
+                            <li>
+                              <a href="#paymentrequests-structure-paymenterror" class="toc-h3 toc-link" data-title="paymentError">paymentError</a>
                             </li>
                         </ul>
                   </li>
@@ -377,7 +399,7 @@
 <tr>
 <td>photoUrl</td>
 <td>string</td>
-<td>URL of the user&#39;s profile image</td>
+<td>URL of the user&#39;s profile image. Updates on each login in case of third-party.</td>
 <td>[optional]</td>
 </tr>
 <tr>
@@ -531,27 +553,15 @@ One of either <code>phone</code> or <code>email</code> is required for each user
 <td>[optional]</td>
 </tr>
 <tr>
-<td>categorySlug</td>
-<td>string</td>
-<td>A slug of the category to be used in sorting and displaying in the UI</td>
-<td>[optional]</td>
-</tr>
-<tr>
-<td>categoryText</td>
-<td>string</td>
-<td>Name of the category to be shown in UI</td>
+<td>categoryInfo</td>
+<td>map of type <code>categoryInfo</code></td>
+<td>A map containing information about the category(s) this dish belongs to, and the display order</td>
 <td>[optional]</td>
 </tr>
 <tr>
 <td>averagePreparationTime</td>
 <td>number</td>
 <td>Time it takes for the dish to be prepared, on average (in seconds)</td>
-<td>[optional]</td>
-</tr>
-<tr>
-<td>currentPreparationTime</td>
-<td>number</td>
-<td>The current preparation time estimate</td>
 <td>[optional]</td>
 </tr>
 <tr>
@@ -601,6 +611,31 @@ One of either <code>phone</code> or <code>email</code> is required for each user
 <td>map of type <a href="#dishes-structure-restaurantdetails"><code>restaurantDetails</code></a></td>
 <td>A map containing brief information about the restaurant</td>
 <td>[required]</td>
+</tr>
+</tbody></table>
+<h3 id='dishes-structure-categoryinfo'>categoryInfo</h3>
+<p><code>categoryInfo: map of map with keys as categorySlug</code>
+below is the information on what each key <code>categorySlug</code> has as ivalues.</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>categoryText</td>
+<td>string</td>
+<td>Category text to show in the UI</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>displayOrder</td>
+<td>number</td>
+<td>Dispplay order of this dish in the specific category. A simple index value. In case not present, the dish is inserted at the bottom of the list</td>
+<td>[optional]</td>
 </tr>
 </tbody></table>
 <h3 id='dishes-structure-restaurantdetails'>restaurantDetails</h3>
@@ -823,10 +858,22 @@ One of either <code>phone</code> or <code>email</code> is required for each user
 <td>[optional]</td>
 </tr>
 <tr>
+<td>phone</td>
+<td>string</td>
+<td>Phone number of the restaurant</td>
+<td>[optional]</td>
+</tr>
+<tr>
 <td>address</td>
 <td>map of type <a href="#restaurants-structure--address"><code>address</code></a></td>
 <td>Details about location of the restaurant</td>
 <td>[required]</td>
+</tr>
+<tr>
+<td>categoriesDisplayOrder</td>
+<td>arrary of <code>categorySlug</code></td>
+<td>Contains information about the displayOrder of the categories. When updating, a new instance has to be created since firestore does not allow order operations</td>
+<td>[optional]</td>
 </tr>
 </tbody></table>
 <h3 id='restaurants-structure-address'>address</h3>
@@ -1056,12 +1103,108 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 <td>[optional]</td>
 </tr>
 </tbody></table>
+<h1 id='paymentrequests'>PaymentRequests</h1>
+<p>A paymentRequest document processes a payment for a given cart and generates an order upon successful confirmation</p>
+<h2 id='paymentrequests-path'>Path</h2>
+<p><code>/paymentRequests/{paymentRequest}</code></p>
+
+<p>where <code>{paymentRequest}</code> is an auto-generated payment request ID.</p>
+<h2 id='paymentrequests-structure'>Structure</h2>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>cartId</td>
+<td>string</td>
+<td>ID of the cart for which the payment is being processed. Note that this is the same as the user uid</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>paymentInstruction</td>
+<td>map of type <code>paymentInstruction</code></td>
+<td>Contains information about the cardId to charge or applePay/googlePay nonce</td>
+<td>[required]</td>
+</tr>
+<tr>
+<td>paymentStatus</td>
+<td>string enum <code>completed</code>, <code>failed</code>, <code>actionNeeded</code></td>
+<td>Contains information about the status</td>
+<td>[optional] generated by server</td>
+</tr>
+<tr>
+<td>paymentError</td>
+<td>map of type <code>paymentError</code></td>
+<td>Contains information about the error message associated with the payment</td>
+<td>[optional] generated by server</td>
+</tr>
+</tbody></table>
+<h3 id='paymentrequests-structure-paymentinstruction'>paymentInstruction</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>applePayNonce</td>
+<td>string</td>
+<td>In case apple pay is used, the payments SDK will generate a nonce</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>googlePayNonce</td>
+<td>string</td>
+<td>In case google pay is used, the payments SDK will generate a nonce</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>cardId</td>
+<td>string</td>
+<td>ID of the card to be charged</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
+<h3 id='paymentrequests-structure-paymenterror'>paymentError</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>errorCode</td>
+<td>string</td>
+<td>Code of the generated error</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>adminMessage</td>
+<td>string</td>
+<td>Message to be recorded for the admin for debugging</td>
+<td>[optional]</td>
+</tr>
+<tr>
+<td>userMessage</td>
+<td>string</td>
+<td>In case there is any message deliverable to the user, add it here, otherwise a default &#39;Something went wrong, Try again&#39; type message will be shown to the user</td>
+<td>[optional]</td>
+</tr>
+</tbody></table>
 <h1 id='orders'>Orders</h1>
-<p>Contains carts for users.</p>
+<p>A cart is converted to an order after a successful payment.</p>
 <h2 id='orders-path'>Path</h2>
 <p><code>/orders/{order}</code></p>
 
-<p>where <code>{order}</code> is an automatically generated unique id of the order</p>
+<p>where <code>{order}</code> is an a unique order id. This id corresponds to a successful paymentRequest id</p>
 <h2 id='orders-structure'>Structure</h2>
 <table><thead>
 <tr>
@@ -1080,7 +1223,7 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 <tr>
 <td>orderStatus</td>
 <td>special map of type <code>orderStatus</code></td>
-<td>Constructs five keys: <code>processing</code> - <code>placed</code> - <code>confirmed</code> - <code>prepared</code>  - <code>completed</code> as the order progress changes</td>
+<td>Constructs five keys: <code>placed</code> - <code>confirmed</code> - <code>preparing</code> - <code>prepared</code>  - <code>completed</code> as the order progress changes</td>
 <td>[required]</td>
 </tr>
 <tr>
@@ -1088,12 +1231,6 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 <td>map of type <code>orderError</code></td>
 <td>The error object in case the order fails</td>
 <td>[optional]</td>
-</tr>
-<tr>
-<td>createdAt</td>
-<td>timestamp</td>
-<td>Timestamp of when the order was created</td>
-<td>[required] generated automatically by a cloud function</td>
 </tr>
 <tr>
 <td>uid</td>
@@ -1156,7 +1293,7 @@ This map is slightly different than others. It uses <code>dishId</code> as key.
 <td>[required]</td>
 </tr>
 <tr>
-<td>chargeInstruction</td>
+<td>paymentDetails</td>
 <td>map of type <code>paymentDetails</code></td>
 <td>A map containing information regarding payments</td>
 <td>[required]</td>
@@ -1201,17 +1338,17 @@ This key only exists when the order fails due to one of many reasons</p>
 <tr>
 <td>errorStatus</td>
 <td>string</td>
-<td>One of the following: <code>paymentRejected</code>, <code>restaurantCancelled</code>, <code>userCancelled</code>, <code>otterlyCancelled</code></td>
+<td>One of the following: <code>restaurantCancelled</code>, <code>userCancelled</code>, <code>otterlyCancelled</code></td>
 <td>[required]</td>
 </tr>
 <tr>
-<td>errorMessageAdmin</td>
+<td>mssageAdmin</td>
 <td>string</td>
 <td>Error message for the records of adminn</td>
 <td>[optional]</td>
 </tr>
 <tr>
-<td>errorMessageUser</td>
+<td>messageUser</td>
 <td>string</td>
 <td>Error message to show to the user</td>
 <td>[optional]</td>
@@ -1227,34 +1364,16 @@ This key only exists when the order fails due to one of many reasons</p>
 </tr>
 </thead><tbody>
 <tr>
-<td>cardId</td>
+<td>squarePaymentId</td>
 <td>string</td>
-<td>ID of the card to charge</td>
+<td>ID of the payment</td>
 <td>[required]</td>
 </tr>
 <tr>
-<td>applePayNonce</td>
-<td>string</td>
-<td>In case apple pay is used, the payments SDK will generate a nonce</td>
-<td>[optional]</td>
-</tr>
-<tr>
-<td>googlePayNonce</td>
-<td>string</td>
-<td>In case google pay is used, the payments SDK will generate a nonce</td>
-<td>[optional]</td>
-</tr>
-<tr>
-<td>status</td>
-<td>string</td>
-<td>one of the following <code>processing</code>,<code>accepted</code>, <code>rejected</code></td>
-<td></td>
-</tr>
-<tr>
-<td>retryCount</td>
-<td>number</td>
-<td>keeps a track of retries and confirms that a retry is requested. Initialises at 1 on first retry</td>
-<td>[optional]</td>
+<td>completedAt</td>
+<td>timestamp</td>
+<td>Timestamp of payment completion</td>
+<td>[required]</td>
 </tr>
 </tbody></table>
 <h3 id='orders-structure-orderdishes'>orderDishes</h3>
