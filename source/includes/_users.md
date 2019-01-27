@@ -20,10 +20,18 @@ squareId | string | A unique square ID of the user | [required] - automatically 
 currentLocation| geopoint | Lat-long of the current location of the user | [optional]
 currentAddress | string | A human readable (address) format of the current location to show in the application | [optional]
 marketingConsent | boolean | Whether the user has given us consent to send marketing communications | [required] `default: false`
+userRequests | map of type `userRequests` | Contains information about additional user-prompted actions, such as adding a card. It hits the API automatically. | [optional]
 
 <aside class="notice">
 One of either <code>phone</code> or <code>email</code> is required for each user. We'll use email as the default contact method, unless it is not present.
 </aside>
+
+### userRequests
+map of type `userRequests`
+
+| Name | Type | Description | Notes
+--- |---|------|--
+addCardNonce | string | Adds a card to the user's private subcollection from the given nonce | [optional]
 
 ## Subcollection : Private
 The private subcollection contains the private data about a user such as payments and personal preferences. This is stored in a separate subcollection to avoid exposing everytime a user object is fetched
